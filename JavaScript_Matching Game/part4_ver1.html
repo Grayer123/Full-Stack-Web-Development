@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+    <head>
+		<title>Matching Game</title>
+		<meta name="author" content="Grayer">
+        <style>
+            div {
+				position:absolute;
+				width:500px;
+				height:500px;
+			}
+			#rightSide {
+				left:500px;
+				border-left:1px solid black;
+			}
+				
+			img {position:absolute}
+        </style>
+    </head>
+    <body id="theBody">
+		<h3>Matching Game</h3>
+		<div id="leftSide"></div>
+		<div id="rightSide"></div>
+        <script>
+			var globalObj = {
+				numberOfFaces: 5,
+				theBody: document.getElementById("theBody"),
+				theLeftSide: document.getElementById("leftSide"),
+				theRightSide: document.getElementById("rightSide"),
+				generateFaces: function(){
+					var tmp = this.numberOfFaces;
+					while(tmp > 0){
+						var image = document.createElement("img");
+						image.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+						image.style.top = this.generateRandomNum() + "px";
+						image.style.left = this.generateRandomNum() + "px";
+						this.theLeftSide.appendChild(image);
+						tmp--;
+					}
+					this.attachLastChildHandler();
+					this.attachBodyHandler();
+				},
+				generateRandomNum: function(){
+					return Math.floor(Math.random() * 400 + 1);
+				},
+				copyFacesToRight: function(){
+					var leftSideImages = this.theLeftSide.cloneNode(true);
+					leftSideImages.removeChild(leftSideImages.lastChild);
+					this.theRightSide.appendChild(leftSideImages);
+				},
+				deleteAllLeftNodes: function(){
+					while(this.theLeftSide.firstChild){
+						this.theLeftSide.removeChild(this.theLeftSide.firstChild);
+					}
+				},
+				deleteAllRightNodes: function(){
+					while(this.theRightSide.firstChild){
+						this.theRightSide.removeChild(this.theRightSide.firstChild);
+					}
+				},
+				attachLastChildHandler: function(){
+					this.theLeftSide.lastChild.onclick = this.handleLastChildClick;
+				},
+				handleLastChildClick: function nextLevel(event){
+							event.stopPropagation();
+							globalObj.numberOfFaces += 5;
+							globalObj.deleteAllLeftNodes();
+							globalObj.deleteAllRightNodes();
+							globalObj.generateFaces();
+							globalObj.copyFacesToRight();
+							//globalObj.attachLastChildHandler();
+				},
+				attachBodyHandler: function(){
+					this.theBody.onclick = this.handleBodyClick;
+				},
+				handleBodyClick: function gameOver(){
+							alert("Game Over!");
+							globalObj.theBody.onclick = null;
+							globalObj.theLeftSide.lastChild.onclick = null;
+				}
+			}
+			window.addEventListener("load", globalObj.generateFaces());
+			window.addEventListener("load", globalObj.copyFacesToRight());
+			//window.addEventListener("load", globalObj.attachLastChildHandler());
+			//window.addEventListener("load", globalObj.attachBodyHandler());
+		</script>
+    </body>
+</html>
