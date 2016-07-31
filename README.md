@@ -1,2 +1,2 @@
 # Full-Stack-Web-Development
-html; css; bootstrap; javascript; jQuery; ajax
+html; css; javascript; bootstrap; jQuery; ajax
